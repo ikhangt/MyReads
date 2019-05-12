@@ -10,7 +10,8 @@ class Book extends Component {
     title: this.props.title,
     author: this.props.author,
     url: this.props.url,
-    shelf: this.props.shelf
+    shelf: this.props.shelf,
+    id: this.props.id,
   }
   
 
