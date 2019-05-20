@@ -12,13 +12,14 @@ class Shelf extends Component {
         <h2 className="bookshelf-title">{this.props.bookShelfTile}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
+          {/* eslint-disable-next-line array-callback-return */}
           {this.props.books.map((book) => {
-            if(this.props.bookShelfTile == book.shelf){
+            if(this.props.bookShelfTile === book.shelf){
               return(
-                <li> <Book title = {book.title} author = {book.author} url = {book.url} shelf ={book.shelf} 
+                <li key = {book.id}> <Book title = {book.title} author = {book.author} url = {book.url} shelf ={book.shelf} 
                 editBooks ={this.props.editBooks}/> </li>
               )
-            }  
+            }
           })}
           </ol>
         </div>

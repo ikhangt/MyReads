@@ -3,27 +3,25 @@ import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf.js'
 import SearchPage from './SearchPage';
+import { Route, Link } from "react-router-dom";
 
 class BooksApp extends React.Component {
-  closeSearch = () => this.setState({ showSearchPage: false })
+  closeSearch = () => <Link to="/">Main page</Link>
   editBooks = (originalShelfValue,finalShelfValue,book) => {
-    console.log(`originalShelfValue: ${originalShelfValue} finalShelfValue: ${finalShelfValue}`)
     let booksCopy = this.state.books;
-    
     if(originalShelfValue === 'none'){
       book.shelf = this.shelfValueMap[finalShelfValue];
       booksCopy.push(book)
     } else {
+      // eslint-disable-next-line array-callback-return
       booksCopy.map((curBook) =>{ //need to update the db here aswell
-        if(curBook.author == book.author 
-          && curBook.title == book.title){
+        if(curBook.author === book.author 
+          && curBook.title === book.title){
           curBook.shelf = this.shelfValueMap[finalShelfValue];
           BooksAPI.update(curBook,finalShelfValue)
         }
       })
     }
-    console.log("book: ")
-    console.log(booksCopy)
     this.setState({books: booksCopy})
   }
   getAuthors(dbBookEntry){
@@ -60,7 +58,6 @@ class BooksApp extends React.Component {
           return this.cleanDBBookEntry(dBBookEntry)
         })
         this.setState({books: books})
-        console.log(this.state.books)
       }
     })
   }
@@ -85,13 +82,13 @@ shelfValueMap = {"currentlyReading":"Currently Reading",
     }
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
+      <Route path='/search' render={() => (
           <SearchPage searchValue closeSearch = {this.closeSearch} foundBooks = {this.state.foundBooks} editBooks ={this.editBooks} cleanDBBookEntry={this.cleanDBBookEntry} books = {this.state.books}/>
-        ) : (
-
+        )} />
+        <Route exact path='/' render={() => (
           <div className="list-books">
             <div className="list-books-title">
-              <h1>{'My Reads'}</h1>{/*editRequired*/}
+              <h1>{'My Reads'}</h1>
             </div>
             <div className="list-books-content">
               <div>
@@ -101,10 +98,10 @@ shelfValueMap = {"currentlyReading":"Currently Reading",
               </div>
             </div>
             <div className="open-search">
-              <button onClick={() => this.setState({ showSearchPage: true })}>Add a book</button>
+            <Link to="/search">Search</Link>
             </div>
           </div>
-        )}
+        )}/>
       </div>
     )
   }
